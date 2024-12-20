@@ -38,6 +38,7 @@ function App() {
             <Home
               products={products}
               addToCart={(product) => dispatch(addToCart(product))}
+              cart={cart}
             />
           }
         />

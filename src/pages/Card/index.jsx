@@ -1,6 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeFromCart, changeQuantity } from "../../store/cartSlice";
+import {
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+} from "../../store/cartSlice";
 
 function CartPage({ cart }) {
   const dispatch = useDispatch();
@@ -16,10 +20,26 @@ function CartPage({ cart }) {
         {cart.length === 0 ? (
           <p>Karzinkangiz bo'sh.</p>
         ) : (
-          cart.map((product) => (
+          cart.map((product, index) => (
             <div key={product.id} className="flex flex-col  border pb-3">
               <img className="max-w-[300px] mb-5" src={product.image} alt="" />
-              <h4 className="mb-7">{product.name}</h4>
+              <h4 className="">{product.name}</h4>
+              <p>{product.price}</p>
+              <div className="flex mx-auto my-6 border items-center justify-between px-2 py-3 w-[100px]">
+                <button
+                  className="w-[30px] flex items-center justify-center h-[30px] text-3xl border rounded-full"
+                  onClick={() => dispatch(increaseQuantity(index))}
+                >
+                  +
+                </button>
+                <p className="">{product.quantity}</p>
+                <button
+                  className=" w-[30px] flex items-center justify-center h-[30px] text-3xl border rounded-full"
+                  onClick={() => dispatch(decreaseQuantity(index))}
+                >
+                  -
+                </button>
+              </div>
               <button
                 className="bg-[#ff0d0d] px-12 py-4 rounded-2xl"
                 onClick={() => dispatch(removeFromCart(product.id))}
@@ -30,6 +50,15 @@ function CartPage({ cart }) {
           ))
         )}
       </div>
+      <p>
+        {(() => {
+          let sum = 0;
+          cart.map((value) => {
+            sum += value.quantity * value.price;
+          });
+          return sum;
+        })()}{" som"}
+      </p>
     </div>
   );
 }
